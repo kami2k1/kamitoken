@@ -4,10 +4,10 @@ from datetime import datetime
 import json
 class kamitoken:
    
-    def __init__(self, key : str = "kami" , time : int = 3  ) -> None:
+    def __init__(self, key : str = "kami" , time : int = 300  ) -> None:
       
         self.key = self.getkey(key)
-        self.time = time 
+        self.time = time *60
     def getkey (self ,  passwd : str ): 
         # get key from passwd 
         has_passwd = hashlib.sha256(passwd.encode()).digest()
