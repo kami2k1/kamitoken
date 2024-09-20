@@ -7,16 +7,17 @@ class kamitoken:
     def __init__(self, key : str = "kami" , time : int = 300  ) -> None:
       
         self.key = self.getkey(key)
-        self.time = time *60
+        self.time = time *60 # x phút 
     def getkey (self ,  passwd : str ): 
         # get key from passwd 
         has_passwd = hashlib.sha256(passwd.encode()).digest()
         key_enc = base64.urlsafe_b64encode(has_passwd[:32])
         return key_enc
 
-    def encode (self, User : str ):
+    def encode (self, User : str , passwd : str ):
         data = {
             "user": User,
+            "passwd":passwd,
             "time": int(datetime.now().timestamp())
         }
         enc = Fernet(self.key)
@@ -40,7 +41,7 @@ class kamitoken:
             data = json.loads(data)
             now = int(datetime.now().timestamp())
             if self.get_time(int(data['time'])):
-                return True , data['user']
+                return True , data
             else:
                 return False, 0
 
@@ -57,3 +58,15 @@ class kamitoken:
 
     # async def decode(data : str):
 
+token = kamitoken(key="qsuangprovip", time=5)
+
+key = token.encode("kami@123.com", "12345")
+import time
+time.sleep(6)
+check , data = token.decode(key)
+if check:
+    print(data)
+    print(key)
+    print(token.key)
+else:
+    print("token đã hiết Hạn rồi em ")
